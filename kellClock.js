@@ -1,4 +1,4 @@
-function RivClock(selector, endDate, daysAsHours = false, textContents = {}) {
+function kellClock(selector, endDate, daysAsHours = false, textContents = {}) {
     this.selector = selector;
     this.endDate = endDate;
     this.daysAsHours = daysAsHours;
@@ -11,13 +11,13 @@ function RivClock(selector, endDate, daysAsHours = false, textContents = {}) {
     };
     this._data = {
         _dateEnd: 0,
-        container: null,
-        timeLeft: 0,
-        timeNow: 0,
+        _container: null,
+        _timeLeft: 0,
+        _timeNow: 0,
         _d: 1000 * 60 * 60 * 24,
         _h: 1000 * 60 * 60,
         _m: 1000 * 60,
-        timerSet: 0,
+        _timerSet: 0,
         _fracts: {
             d: null,
             h: null,
@@ -28,67 +28,79 @@ function RivClock(selector, endDate, daysAsHours = false, textContents = {}) {
     return this;
 };
 
-RivClock.prototype.run = function () {
-    if (!this.initialised) this.init();
-    if ((this.initialised) && (this._data.timerSet == 0) && (this._data.container)) {
-        for (let k in this._data._fracts) {
+kellClock.prototype.run = function () {
+    let _d = this._data;
+    let i = this.initialised ? true : this.init();
+    if (i && (this.initialised) && (_d._timerSet == 0) && (_d._container)) {
+        for (let k in _d._fracts) {
             if (k == 'd' && this.daysAsHours) {
                 continue;
             }
-            this._data.container.appendChild(this._data._fracts[k]);
+            _d._container.appendChild(_d._fracts[k]);
             if (Object.keys(this.textContents).length !== 0 && this.textContents.constructor === Object) {
                 let e = document.createElement('span');
                 e.className = 'label';
                 e.textContent = this.textContents[k];
-                this._data.container.appendChild(e);
+                _d._container.appendChild(e);
             }
         }
-        this._data.timeNow = new Date().getTime();
-        this._data.timeLeft = this._data._dateEnd - this._data.timeNow;
-        if (this._data.timeLeft < 0) {
-            this._data.selector.textContent = 'EXPIRED';
+        _d._timeNow = new Date().getTime();
+        _d._timeLeft = _d._dateEnd - _d._timeNow;
+        if (_d.timeLeft < 0) {
+            _d.selector.textContent = 'EXPIRED';
         } else {
             this.update();
         }
-        timerSet = 1;
+        _d._timerSet = 1;
     }
+    return null;
 }
 
-RivClock.prototype.init = function () {
+kellClock.prototype.init = function () {
     // Initialise
-    this._data.container = document.querySelector(this.selector);
-    if (this._data.container == null) {
+    let _d = this._data;
+    _d._container = document.querySelector(this.selector);
+    if (_d._container == null) {
         console.log('No container for clock');
-        return;
+        return false;
     }
-    this._data._dateEnd = new Date(this.endDate).getTime();
-    if (this._data._dateEnd == null || this._data._dateEnd == 0 || this._data._dateEnd == undefined || isNaN(this._data._dateEnd)) {
+    if (_d._container.dataset.clockStatus != undefined) {
+        console.log("Clock already init'd!");
+        return false;
+    }
+    _d._container.dataset.clockStatus = "init";
+    _d._dateEnd = new Date(this.endDate).getTime();
+    if (_d._dateEnd == null || _d._dateEnd == 0 || _d._dateEnd == undefined || isNaN(_d._dateEnd)) {
         console.log('Failed to find end date');
-        return;
+        return false;
     }
-    for (let k of Object.keys(this._data._fracts)) {
-        this._data._fracts[k] = document.createElement('span');
-        this._data._fracts[k].className = `${this.selector}__${k} clock-timer`;
+    for (let k of Object.keys(_d._fracts)) {
+        _d._fracts[k] = document.createElement('span');
+        _d._fracts[k].className = `${this.selector}__${k} clock-timer`;
     }
     this.initialised = true;
+    return this.initialised;
 };
 
-RivClock.prototype.update = function () {
-    this._data.timeNow = new Date().getTime();
-    this._data.timeLeft = this._data._dateEnd - this._data.timeNow;
+kellClock.prototype.update = function () {
+    let _d = this._data;
+    _d._timeNow = new Date().getTime();
+    _d.timeLeft = _d._dateEnd - _d._timeNow;
+    _d._container.dataset.clockStatus = "running";
     if (!this.daysAsHours) {
-        this._data._fracts.d.textContent = this.stringPad(Math.floor(this._data.timeLeft / this._data._d));
+        _d._fracts.d.textContent = this.stringPad(Math.floor(_d.timeLeft / _d._d));
     }
-    this._data._fracts.h.textContent = this.daysAsHours ? this.stringPad(Math.floor((this._data.timeLeft % this._data._d) / this._data._h) + Math.floor(this._data.timeLeft / this._data._d) * 24) : this.stringPad(Math.floor((this._data.timeLeft % this._data._d) / this._data._h));
-    this._data._fracts.m.textContent = this.stringPad(Math.floor((this._data.timeLeft % this._data._h) / this._data._m));
-    this._data._fracts.s.textContent = this.stringPad(Math.floor((this._data.timeLeft % this._data._m) / 1000));
-    if (this._data.timeLeft < 0) {
+    _d._fracts.h.textContent = this.daysAsHours ? this.stringPad(Math.floor((_d.timeLeft % _d._d) / _d._h) + Math.floor(_d.timeLeft / _d._d) * 24) : this.stringPad(Math.floor((_d.timeLeft % _d._d) / _d._h));
+    _d._fracts.m.textContent = this.stringPad(Math.floor((_d.timeLeft % _d._h) / _d._m));
+    _d._fracts.s.textContent = this.stringPad(Math.floor((_d.timeLeft % _d._m) / 1000));
+    if (_d.timeLeft < 0) {
         document.querySelector('#mn_cd-container').textContent = 'EXPIRED';
+        _d._container.dataset.clockStatus = "expired";
     } else {
         window.setTimeout(() => { this.update(); }, 1000);
     }
 }
 
-RivClock.prototype.stringPad = function (n) {
+kellClock.prototype.stringPad = function (n) {
     return String("0" + n).slice(-2);
 }
