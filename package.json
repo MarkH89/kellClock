@@ -1,0 +1,32 @@
+{
+  "name": "kellclock",
+  "version": "1.0.0",
+  "description": "Vanilla JS Simple Clock",
+  "main": "src/kellClock.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkH89/kellClock.git"
+  },
+  "keywords": [
+    "clock",
+    "kellClock",
+    "countdown",
+    "timer",
+    "vanilla",
+    "javascript",
+    "js"
+  ],
+  "author": "Markus Aleksander Holden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarkH89/kellClock/issues"
+  },
+  "homepage": "https://github.com/MarkH89/kellClock#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
