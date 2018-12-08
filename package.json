@@ -5,7 +5,7 @@
   "main": "src/kellClock.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d build"
+    "build": "babel src -d build && uglifyjs -c -m -o build/kellClock.min.js -- build/kellClock.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,7 @@
     "@babel/core": "^7.2.0",
     "@babel/preset-env": "^7.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "uglify-js": "^3.4.9"
+  }
 }
