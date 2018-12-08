@@ -35,6 +35,7 @@ Required parameters:
 
 Optional parameters:
 * Display days as hours - remaining days is included in the hours value (so hour values can be 23+ hours remaining) (Boolean) Default: false
+* Minimum number of digits required for time values - Pad values with leading 0 if the time value is less than the number of digits required. I.e 9 will display as 09 is min value is 2. 9 will display as 9 if value is 1. 9 will display as 009 if value is 3. (Int) Default: 2
 * Text to denote time fractions (Object) Default:
 ```
 {

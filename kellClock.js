@@ -50,7 +50,7 @@ var kellClock = (function () {
         }
     }
 
-    var _init = function (selector, dateEndString, daysAsHours = false, textContents = {
+    var _init = function (selector, dateEndString, daysAsHours = false, minPadding = 2, textContents = {
         d: 'd',
         h: 'h',
         m: 'm',
@@ -65,6 +65,7 @@ var kellClock = (function () {
         _data._daysAsHours = daysAsHours;
         _data._initialised = false;
         _data._textContents = textContents;
+        _data._minPadding = minPadding;
 
         _data._initialised = true;
 
@@ -118,6 +119,7 @@ var kellClock = (function () {
         _h: 1000 * 60 * 60,
         _m: 1000 * 60,
         _timerSet: 0,
+        _minPadding: 0,
         _fracts: {
             d: null,
             h: null,
@@ -126,8 +128,9 @@ var kellClock = (function () {
         }
     }
 
+    // Improved String Padding
     var _stringPad = function (n) {
-        return String("0" + n).slice(-2);
+        return (String(n).split("").length >= _data._minPadding) ? String(n) : String("0" + n).slice(-(_data._minPadding));
     }
 
     return {
