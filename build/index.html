@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .clock-1,
+        .clock-2,
+        .clock-3 {
+            line-height: 2em;
+        }
+        span {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-1"></div>
+    <div class="clock-2"></div>
+    <div class="clock-3"></div>
+    <script type="text/javascript" src="kellClock.min.js"></script>
+    <script>
+        var clock1 = new kellClock('.clock-1', '12/06/2019 12:00:00').run();
+        var clock2 = new kellClock('.clock-2', '12/07/2019 12:00:00', true);
+        // ...later
+        clock2.run();
+        // With additional options:
+        var clock3 = new kellClock(
+            '.clock-3',
+            '12/07/2019 12:00:00',
+            false,
+            {
+                d: 'Days',
+                h: 'Hours',
+                m: 'Minutes',
+                s: 'Seconds'
+            },
+            2,
+            false
+        ).run();
+    </script>
+</body>
+</html>
