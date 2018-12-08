@@ -1,14 +1,15 @@
-function kellClock(selector, endDate, daysAsHours = false, textContents = {}) {
+function kellClock(selector, endDate, daysAsHours = false, textContents = {
+    d: 'd',
+    h: 'h',
+    m: 'm',
+    s: 's'
+}
+) {
     this.selector = selector;
     this.endDate = endDate;
     this.daysAsHours = daysAsHours;
     this.initialised = false;
-    this.textContents = {
-        d: 'd',
-        h: 'h',
-        m: 'm',
-        s: 's'
-    };
+    this.textContents = textContents;
     this._data = {
         _dateEnd: 0,
         _container: null,
@@ -37,7 +38,7 @@ kellClock.prototype.run = function () {
                 continue;
             }
             _d._container.appendChild(_d._fracts[k]);
-            if (Object.keys(this.textContents).length !== 0 && this.textContents.constructor === Object) {
+            if (this.textContents && (Object.keys(this.textContents).length !== 0) && (this.textContents.constructor === Object)) {
                 let e = document.createElement('span');
                 e.className = 'label';
                 e.textContent = this.textContents[k];
