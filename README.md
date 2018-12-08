@@ -27,6 +27,21 @@ var clock1 = new kellClock('.kell-clock', '12/06/2018 12:00:00').run();
 var clock2 = new kellClock('.kell-clock', '12/07/2018 12:00:00');
 // ...later
 clock2.run();
+
+// With additional options:
+var clock3 = new kellClock(
+    '.kell-clock',
+    '12/07/2018 12:00:00',
+    false,
+    {
+        d: 'Days',
+        h: 'Hours',
+        m: 'Minutes',
+        s: 'Seconds'
+    },
+    2,
+    false
+);
 ```
 
 Required parameters:
@@ -35,7 +50,6 @@ Required parameters:
 
 Optional parameters:
 * Display days as hours - remaining days is included in the hours value (so hour values can be 23+ hours remaining) (Boolean) Default: false
-* Minimum number of digits required for time values - Pad values with leading 0 if the time value is less than the number of digits required. I.e 9 will display as 09 is min value is 2. 9 will display as 9 if value is 1. 9 will display as 009 if value is 3. (Int) Default: 2
 * Text to denote time fractions (Object) Default:
 ```
 {
@@ -45,4 +59,6 @@ Optional parameters:
     s: 's'
 }
 ```
+* Minimum number of digits required for time values - Pad values with leading 0 if the time value is less than the number of digits required. I.e 9 will display as 09 is min value is 2. 9 will display as 9 if value is 1. 9 will display as 009 if value is 3. (Int) Default: 2
+* Debug Mode - set to true to see console output for testing (Boolean) Default: false
 Each key denotes the fraction of the timer that the text is applied to.

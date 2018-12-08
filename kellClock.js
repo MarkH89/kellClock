@@ -2,13 +2,14 @@ function kellClock(
     selector,
     dateEndString,
     daysAsHours = false,
-    minPadding = 2,
     textContents = {
         d: 'd',
         h: 'h',
         m: 'm',
         s: 's'
-    }
+    },
+    minPadding = 2,
+    debugMode = false
 ) {
     // Check required values have been passed
     if (!selector || !dateEndString) { return null; }
@@ -33,110 +34,121 @@ function kellClock(
                 h: null,
                 m: null,
                 s: null
-            }
+            },
+            _debugMode: debugMode
         }
     })();
 
+    let _d = this._data;
+
     // Set Initial Data
-    this._data._selector = selector;
-    this._data._dateEndString = dateEndString;
-    this._data._daysAsHours = daysAsHours;
-    this._data._initialised = false;
-    this._data._textContents = textContents;
-    this._data._minPadding = minPadding;
+    _d._selector = selector;
+    _d._dateEndString = dateEndString;
+    _d._daysAsHours = daysAsHours;
+    _d._initialised = false;
+    _d._textContents = textContents;
+    _d._minPadding = minPadding;
 
     // Preflight setup
-    this._data._initialised = this._preflight();
+    _d._initialised = this._preflight();
 
     return this;
 };
 
 kellClock.prototype._preflight = function () {
-    if (this._data._initialised) { return true; }
+    let _d = this._data;
+    if (_d._initialised) { return true; }
     // Preflight checks and initialisations
     // Check selector exists
-    if ((this._data._container = document.querySelector(this._data._selector)) == null) {
-        console.log('No container for clock');
+    if ((_d._container = document.querySelector(_d._selector)) == null) {
+        this._logger('No container for clock');
         return false;
     }
     // Check selecotr is not already in use
-    if (this._data._container.dataset.clockStatus != undefined) {
-        console.log("Clock already init'd!");
+    if (_d._container.dataset.clockStatus != undefined) {
+        this._logger("Clock already init'd on this selector!");
         return false;
     }
     // Check DateEnd is a valid time
-    this._data._dateEnd = new Date(this._data._dateEndString).getTime();
-    if (this._data._dateEnd == null || this._data._dateEnd == 0 || this._data._dateEnd == undefined || isNaN(this._data._dateEnd)) {
-        console.log('Failed to find end date');
+    _d._dateEnd = new Date(_d._dateEndString).getTime();
+    if (_d._dateEnd == null || _d._dateEnd == 0 || _d._dateEnd == undefined || isNaN(_d._dateEnd)) {
+        this._logger('Failed to find end date');
         return false;
     }
     // Set data on element for clock
-    this._data._container.dataset.clockStatus = "init";
+    _d._container.dataset.clockStatus = "init";
     // Create time fracts
-    for (let k of Object.keys(this._data._fracts)) {
-        this._data._fracts[k] = document.createElement('span');
-        this._data._fracts[k].className = `${this._data._selector}__${k} kellClock-fraction`;
+    for (let k of Object.keys(_d._fracts)) {
+        _d._fracts[k] = document.createElement('span');
+        _d._fracts[k].className = `${_d._selector}__${k} kellClock-fraction`;
     }
     // All checks and presets completed. Ready to run
     return true;
 }
 
 kellClock.prototype.run = function () {
+    let _d = this._data;
     // Check clock is ready to go
-    if (!this._data._initialised) {
-        console.log('Clock not initialised');
+    if (!_d._initialised) {
+        this._logger('Clock failed initialisation');
         return;
     }
     // Insert time fracts
-    for (let k in this._data._fracts) {
-        if (k == 'd' && this._data._daysAsHours) {
+    for (let k in _d._fracts) {
+        if (k == 'd' && _d._daysAsHours) {
             // If Days is to be included as hours, then ignore the D element
             continue;
         }
-        this._data._container.appendChild(this._data._fracts[k]);
+        _d._container.appendChild(_d._fracts[k]);
         // Check text contents exists and insert if required
-        if (this._data._textContents && (Object.keys(this._data._textContents).length !== 0) && (this._data._textContents.constructor === Object)) {
+        if (_d._textContents && (Object.keys(_d._textContents).length !== 0) && (_d._textContents.constructor === Object)) {
             let e = document.createElement('span');
             e.className = 'label';
-            e.textContent = this._data._textContents[k];
-            this._data._container.appendChild(e);
+            e.textContent = _d._textContents[k];
+            _d._container.appendChild(e);
         }
     }
     // Begin the countdown
-    this._data._timeNow = new Date().getTime();
-    this._data._timeLeft = this._data._dateEnd - this._data._timeNow;
+    _d._timeNow = new Date().getTime();
+    _d._timeLeft = _d._dateEnd - _d._timeNow;
     // Check there's time left to go, otherwise, don't run the update!
-    if (this._data.timeLeft < 0) {
-        this._data.selector.textContent = 'EXPIRED';
+    if (_d.timeLeft < 0) {
+        _d.selector.textContent = 'EXPIRED';
     } else {
         this._update();
     }
 }
 
 kellClock.prototype._update = function () {
+    let _d = this._data;
     // Calculate time remaining
-    this._data._timeNow = new Date().getTime();
-    this._data.timeLeft = this._data._dateEnd - this._data._timeNow;
+    _d._timeNow = new Date().getTime();
+    _d.timeLeft = _d._dateEnd - _d._timeNow;
     // If timer has expired...
-    if (this._data.timeLeft < 0) {
-        this._data._selector.textContent = 'EXPIRED';
-        this._data._container.dataset.clockStatus = "expired";
+    if (_d.timeLeft < 0) {
+        _d._selector.textContent = 'EXPIRED';
+        _d._container.dataset.clockStatus = "expired";
     } else {
         // Set status to Running
-        this._data._container.dataset.clockStatus = "running";
+        _d._container.dataset.clockStatus = "running";
         // Only update Days if not daysAsHours
-        if (!this._data._daysAsHours) {
-            this._data._fracts.d.textContent = this._stringPad(Math.floor(this._data.timeLeft / this._data._d));
+        if (!_d._daysAsHours) {
+            _d._fracts.d.textContent = this._stringPad(Math.floor(_d.timeLeft / _d._d));
         }
         // Update text content for the rest
-        this._data._fracts.h.textContent = this._data._daysAsHours ? this._stringPad(Math.floor((this._data.timeLeft % this._data._d) / this._data._h) + Math.floor(this._data.timeLeft / this._data._d) * 24) : _stringPad(Math.floor((this._data.timeLeft % this._data._d) / this._data._h));
-        this._data._fracts.m.textContent = this._stringPad(Math.floor((this._data.timeLeft % this._data._h) / this._data._m));
-        this._data._fracts.s.textContent = this._stringPad(Math.floor((this._data.timeLeft % this._data._m) / 1000));
+        _d._fracts.h.textContent = _d._daysAsHours ? this._stringPad(Math.floor((_d.timeLeft % _d._d) / _d._h) + Math.floor(_d.timeLeft / _d._d) * 24) : this._stringPad(Math.floor((_d.timeLeft % _d._d) / _d._h));
+        _d._fracts.m.textContent = this._stringPad(Math.floor((_d.timeLeft % _d._h) / _d._m));
+        _d._fracts.s.textContent = this._stringPad(Math.floor((_d.timeLeft % _d._m) / 1000));
         // Set timeout to run for the next second
         window.setTimeout(() => { this._update(); }, 1000);
     }
 }
 
 kellClock.prototype._stringPad = function (n) {
-    return (String(n).split("").length >= this._data._minPadding) ? String(n) : String("0" + n).slice(-(this._data._minPadding));
+    let _d = this._data;
+    return (String(n).split("").length >= _d._minPadding) ? String(n) : String("0" + n).slice(-(_d._minPadding));
+}
+
+kellClock.prototype._logger = function (s) {
+    if (this._data._debugMode) { console.log(s); }
 }
