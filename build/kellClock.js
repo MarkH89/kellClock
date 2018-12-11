@@ -1,21 +1,11 @@
 "use strict";
 
-function kellClock(options // selector,
-// dateEndString,
-// daysAsHours = false,
-// textContents = {
-//     d: 'd',
-//     h: 'h',
-//     m: 'm',
-//     s: 's'
-// },
-// minPadding = 2,
-// debugMode = false
-) {
+function kellClock(options) {
   // Check required values have been passed
   if (!options.selector || !options.dateEndString) {
     return null;
-  }
+  } // Create options objects
+
 
   var _options = {
     selector: options.selector,
@@ -28,7 +18,8 @@ function kellClock(options // selector,
       s: 's'
     },
     minPadding: options.minPadding || 2,
-    debugMode: options.debugMode || false
+    debugMode: options.debugMode || false // Create private data object
+
   };
 
   this._data = function () {
@@ -54,19 +45,10 @@ function kellClock(options // selector,
       },
       _debugMode: _options.debugMode
     };
-  }();
+  }(); // Preflight setup
 
-  var _d = this._data; // Set Initial Data
-  // _d._selector = selector;
-  // _d._dateEndString = dateEndString;
-  // _d._daysAsHours = daysAsHours;
-  // _d._initialised = false;
-  // _d._textContents = textContents;
-  // _d._minPadding = minPadding;
-  // Preflight setup
 
-  _d._initialised = this._preflight();
-  return this;
+  this._data._initialised = this._preflight();
 }
 
 ;
