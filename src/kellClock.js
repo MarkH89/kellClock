@@ -1,20 +1,10 @@
 function kellClock(
     options
-    // selector,
-    // dateEndString,
-    // daysAsHours = false,
-    // textContents = {
-    //     d: 'd',
-    //     h: 'h',
-    //     m: 'm',
-    //     s: 's'
-    // },
-    // minPadding = 2,
-    // debugMode = false
 ) {
     // Check required values have been passed
     if (!options.selector || !options.dateEndString) { return null; }
 
+    // Create options objects
     let _options = {
         selector: options.selector,
         dateEndString: options.dateEndString,
@@ -29,6 +19,7 @@ function kellClock(
         debugMode: options.debugMode || false
     }
 
+    // Create private data object
     this._data = (function () {
         return {
             _selector: _options.selector,
@@ -54,20 +45,8 @@ function kellClock(
         }
     })();
 
-    let _d = this._data;
-
-    // Set Initial Data
-    // _d._selector = selector;
-    // _d._dateEndString = dateEndString;
-    // _d._daysAsHours = daysAsHours;
-    // _d._initialised = false;
-    // _d._textContents = textContents;
-    // _d._minPadding = minPadding;
-
     // Preflight setup
-    _d._initialised = this._preflight();
-
-    return this;
+    this._data._initialised = this._preflight();
 };
 
 kellClock.prototype._preflight = function () {
