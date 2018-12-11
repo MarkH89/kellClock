@@ -20,37 +20,44 @@ Simply create a container for the clock and import kellClock:
 
 And in your main JS file:
 ```
-var clock1 = new kellClock('.kell-clock', '12/06/2018 12:00:00').run();
+let options = {
+    selector : '.kell-clock',
+    dateEndString : '12/06/2018 12:00:00'
+}
+var clock1 = new kellClock(options).run();
 
 // or
 
-var clock2 = new kellClock('.kell-clock', '12/07/2018 12:00:00');
+var clock2 = new kellClock({
+    selector : '.kell-clock',
+    dateEndString : '12/06/2018 12:00:00'
+});
 // ...later
 clock2.run();
 
 // With additional options:
-var clock3 = new kellClock(
-    '.kell-clock',
-    '12/07/2018 12:00:00',
-    false,
-    {
+var clock3 = new kellClock({
+    selector: '.clock-3',
+    dateEndString: '12/07/2019 12:00:00',
+    daysAsHours: false,
+    textContents: {
         d: 'Days',
         h: 'Hours',
         m: 'Minutes',
         s: 'Seconds'
     },
-    2,
-    false
-);
+    minPadding: 2,
+    debugMode: false
+}).run();
 ```
 
-Required parameters:
-* selector (String) i.e '.kell-clock'
-* Date and Time to countdown to (String) i.e '12/06/2018 12:00:00'
+Required options:
+* selector : (String) Selector where the clock is to be inserted i.e '.kell-clock'
+* dateEndString: (String) Date and Time to countdown to i.e '12/06/2018 12:00:00'
 
 Optional parameters:
-* Display days as hours - remaining days is included in the hours value (so hour values can be 23+ hours remaining) (Boolean) Default: false
-* Text to denote time fractions (Object) Default:
+* daysAsHours: (Boolean) Display days as hours - remaining days is included in the hours value (so hour values can be 23+ hours remaining) Default: false
+* textContents: (Object) Text to denote time fractions Default:
 ```
 {
     d: 'd',
@@ -59,6 +66,6 @@ Optional parameters:
     s: 's'
 }
 ```
-* Minimum number of digits required for time values - Pad values with leading 0 if the time value is less than the number of digits required. I.e 9 will display as 09 is min value is 2. 9 will display as 9 if value is 1. 9 will display as 009 if value is 3. (Int) Default: 2
-* Debug Mode - set to true to see console output for testing (Boolean) Default: false
 Each key denotes the fraction of the timer that the text is applied to.
+* minPadding: (Int) Minimum number of digits to display. Values lower than the minPadding will be padded with 0's. Default: 2
+* debugMode: (Boolean) set to true to see console output for testing. Default: false

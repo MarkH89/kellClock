@@ -26,23 +26,28 @@
             selector: '.clock-1',
             dateEndString: '12/06/2019 12:00:00'
         }).run();
-        //var clock2 = new kellClock('.clock-2', '12/07/2019 12:00:00', true);
+        var clock2 = new kellClock({
+            selector: '.clock-2',
+            dateEndString: '12/07/2019 12:00:00',
+            daysAsHours: true});
         // ...later
-        //clock2.run();
+        clock2.run();
+
         // With additional options:
-        // var clock3 = new kellClock(
-        //     '.clock-3',
-        //     '12/07/2019 12:00:00',
-        //     false,
-        //     {
-        //         d: 'Days',
-        //         h: 'Hours',
-        //         m: 'Minutes',
-        //         s: 'Seconds'
-        //     },
-        //     2,
-        //     false
-        // ).run();
+
+        var clock3 = new kellClock({
+            selector: '.clock-3',
+            dateEndString: '12/07/2019 12:00:00',
+            daysAsHours: false,
+            textContents: {
+                d: 'Days',
+                h: 'Hours',
+                m: 'Minutes',
+                s: 'Seconds'
+            },
+            minPadding: 2,
+            debugMode: false
+        }).run();
     </script>
 </body>
 </html>
