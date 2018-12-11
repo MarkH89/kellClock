@@ -1,26 +1,41 @@
 function kellClock(
-    selector,
-    dateEndString,
-    daysAsHours = false,
-    textContents = {
-        d: 'd',
-        h: 'h',
-        m: 'm',
-        s: 's'
-    },
-    minPadding = 2,
-    debugMode = false
+    options
+    // selector,
+    // dateEndString,
+    // daysAsHours = false,
+    // textContents = {
+    //     d: 'd',
+    //     h: 'h',
+    //     m: 'm',
+    //     s: 's'
+    // },
+    // minPadding = 2,
+    // debugMode = false
 ) {
     // Check required values have been passed
-    if (!selector || !dateEndString) { return null; }
+    if (!options.selector || !options.dateEndString) { return null; }
+
+    let _options = {
+        selector: options.selector,
+        dateEndString: options.dateEndString,
+        daysAsHours: options.daysAsHours || false,
+        textContents: options.textContents || {
+            d: 'd',
+            h: 'h',
+            m: 'm',
+            s: 's'
+        },
+        minPadding: options.minPadding || 2,
+        debugMode: options.debugMode || false
+    }
 
     this._data = (function () {
         return {
-            _selector: null,
+            _selector: _options.selector,
             _initialised: false,
-            _daysAsHours: false,
-            _textContents: {},
-            _dateEndString: '',
+            _daysAsHours: _options.daysAsHours,
+            _textContents: _options.textContents,
+            _dateEndString: _options.dateEndString,
             _dateEnd: 0,
             _container: null,
             _timeLeft: 0,
@@ -28,26 +43,26 @@ function kellClock(
             _d: 1000 * 60 * 60 * 24,
             _h: 1000 * 60 * 60,
             _m: 1000 * 60,
-            _minPadding: 0,
+            _minPadding: _options.minPadding,
             _fracts: {
                 d: null,
                 h: null,
                 m: null,
                 s: null
             },
-            _debugMode: debugMode
+            _debugMode: _options.debugMode
         }
     })();
 
     let _d = this._data;
 
     // Set Initial Data
-    _d._selector = selector;
-    _d._dateEndString = dateEndString;
-    _d._daysAsHours = daysAsHours;
-    _d._initialised = false;
-    _d._textContents = textContents;
-    _d._minPadding = minPadding;
+    // _d._selector = selector;
+    // _d._dateEndString = dateEndString;
+    // _d._daysAsHours = daysAsHours;
+    // _d._initialised = false;
+    // _d._textContents = textContents;
+    // _d._minPadding = minPadding;
 
     // Preflight setup
     _d._initialised = this._preflight();
