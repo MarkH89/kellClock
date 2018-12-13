@@ -4,31 +4,21 @@ function kellClock(options) {
   // Check required values have been passed
   if (!options.selector || !options.dateEndString) {
     return null;
-  } // Create options objects
+  } // Create private data object
 
-
-  var _options = {
-    selector: options.selector,
-    dateEndString: options.dateEndString,
-    daysAsHours: options.daysAsHours || false,
-    textContents: options.textContents || {
-      d: 'd',
-      h: 'h',
-      m: 'm',
-      s: 's'
-    },
-    minPadding: options.minPadding || 2,
-    debugMode: options.debugMode || false // Create private data object
-
-  };
 
   this._data = function () {
     return {
-      _selector: _options.selector,
+      _selector: options.selector,
       _initialised: false,
-      _daysAsHours: _options.daysAsHours,
-      _textContents: _options.textContents,
-      _dateEndString: _options.dateEndString,
+      _daysAsHours: options.daysAsHours || false,
+      _textContents: options.textContents || {
+        d: 'd',
+        h: 'h',
+        m: 'm',
+        s: 's'
+      },
+      _dateEndString: options.dateEndString,
       _dateEnd: 0,
       _container: null,
       _timeLeft: 0,
@@ -36,18 +26,19 @@ function kellClock(options) {
       _d: 1000 * 60 * 60 * 24,
       _h: 1000 * 60 * 60,
       _m: 1000 * 60,
-      _minPadding: _options.minPadding,
+      _minPadding: options.minPadding || 2,
       _fracts: {
         d: null,
         h: null,
         m: null,
         s: null
       },
-      _debugMode: _options.debugMode
+      _debugMode: options.debugMode || false
     };
   }(); // Preflight setup
 
 
+  console.log(this);
   this._data._initialised = this._preflight();
 }
 

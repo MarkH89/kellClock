@@ -6,9 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .clock-1,
-        .clock-2,
-        .clock-3 {
+        .clock-1 {
             line-height: 2em;
         }
         span {
@@ -18,25 +16,10 @@
 </head>
 <body>
     <div class="clock-1"></div>
-    <div class="clock-2"></div>
-    <div class="clock-3"></div>
     <script type="text/javascript" src="../src/kellClock.js"></script>
     <script>
         var clock1 = new kellClock({
             selector: '.clock-1',
-            dateEndString: '12/06/2019 12:00:00'
-        }).run();
-        var clock2 = new kellClock({
-            selector: '.clock-2',
-            dateEndString: '12/07/2019 12:00:00',
-            daysAsHours: true});
-        // ...later
-        clock2.run();
-
-        // With additional options:
-
-        var clock3 = new kellClock({
-            selector: '.clock-3',
             dateEndString: '12/07/2019 12:00:00',
             daysAsHours: false,
             textContents: {
