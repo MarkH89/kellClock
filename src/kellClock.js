@@ -1,3 +1,8 @@
+/*
+JS Clock (kellClock)
+Developed by Mark Holden
+Version 1.0.0
+*/
 function kellClock(options) {
     // Check required values have been passed
     if (!options.selector || !options.dateEndString) { return null; }
