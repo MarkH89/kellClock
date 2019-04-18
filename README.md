@@ -1,5 +1,6 @@
 # kellClock
 
+
 kellClock is a small project to make a small, straightforward and easy to use countdown timer. This was built out of initial frustration with numerous projects at work using a jQuery plugin that not only didn't work correctly, often failed to activate when loaded and suffered from lack of decent documentation.
 
 kellClock aims to overcome numerous problems by being:
@@ -8,6 +9,9 @@ kellClock aims to overcome numerous problems by being:
 * Gracefully fail if incorrectly initialised
 * Built in defaults for minimal configuration
 * Allow multiple clocks on the page
+
+## Note - all instructions below apply to v1. V2 will be a major update and work differently to v1. Instructions will be added later.
+## v2 will be developed as a single module that will manage multiple timers with registration features etc.
 
 ## Usage
 
